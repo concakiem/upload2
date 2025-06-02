@@ -17,6 +17,9 @@ export default function Navbar() {
           <Link href="/products/add" className="text-white hover:text-blue-200">
             Thêm sản phẩm
           </Link>
+          <Link href="/orders" className="text-white hover:text-blue-200">
+            Đơn hàng
+          </Link>
         </div>
       </div>
     </nav>

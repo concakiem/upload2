@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function ProductDetailPage({ product }) {
-    const router = useRouter();
+  const router = useRouter();
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [orderForm, setOrderForm] = useState({
     fullName: '',
@@ -15,6 +16,7 @@ export default function ProductDetailPage({ product }) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,25 +29,44 @@ export default function ProductDetailPage({ product }) {
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
 
-    // Simulate API call - replace with actual order processing
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      console.log('Đơn hàng:', {
+      // Gọi API thực tế để lưu đơn hàng vào MongoDB
+      const orderData = {
         product: {
           id: product._id,
           name: product.name,
-          price: product.price
+          price: product.price,
+          imageUrl: product.imageUrl,
+          category: product.category
         },
-        customer: orderForm
+        customer: {
+          fullName: orderForm.fullName,
+          phoneNumber: orderForm.phoneNumber,
+          address: orderForm.address,
+          note: orderForm.note
+        },
+        orderStatus: 'pending', // Trạng thái mặc định
+        totalAmount: product.price
+      };
+
+      const response = await axios.post('/api/orders', orderData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
-      
-      setOrderSuccess(true);
-      
+
+      if (response.data.success) {
+        console.log('Đơn hàng đã được tạo thành công:', response.data.orderId);
+        setOrderSuccess(true);
+      } else {
+        throw new Error(response.data.message || 'Có lỗi xảy ra khi đặt hàng');
+      }
       
     } catch (error) {
       console.error('Lỗi khi đặt hàng:', error);
+      setError(error.response?.data?.message || error.message || 'Có lỗi xảy ra khi đặt hàng');
     } finally {
       setIsSubmitting(false);
     }
@@ -55,12 +76,14 @@ export default function ProductDetailPage({ product }) {
     if (!isSubmitting) {
       setShowOrderModal(false);
       setOrderSuccess(false);
+      setError('');
     }
   };
 
   const handleSuccessClose = () => {
     setShowOrderModal(false);
     setOrderSuccess(false);
+    setError('');
     setOrderForm({
       fullName: '',
       phoneNumber: '',
@@ -152,6 +175,13 @@ export default function ProductDetailPage({ product }) {
                     </svg>
                   </button>
                 </div>
+
+                {/* Error Message */}
+                {error && (
+                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    {error}
+                  </div>
+                )}
 
                 {/* Product Summary */}
                 <div className="bg-gray-50 p-4 rounded-lg mb-4">

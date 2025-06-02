@@ -1,52 +1,16 @@
 // File: app/api/orders/route.js
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import connectToDatabase from '@/lib/mongodb';
+import Order from '@/models/Order';
 import { NextResponse } from 'next/server';
-
-let client;
-let db;
-
-async function connectToDatabase() {
-  if (!client) {
-    const uri = process.env.MONGODB_URI;
-    
-    if (!uri) {
-      throw new Error('MONGODB_URI không được định nghĩa trong file .env.local');
-    }
-
-    client = new MongoClient(uri, {
-      serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-      }
-    });
-    
-    try {
-      await client.connect();
-      // Ping để kiểm tra kết nối
-      await client.db("admin").command({ ping: 1 });
-      console.log("Đã kết nối thành công tới MongoDB Atlas!");
-      
-      // Lấy tên database từ URI hoặc sử dụng tên mặc định
-      const dbName = process.env.MONGODB_DB_NAME || 'ecommerce_store';
-      db = client.db(dbName);
-    } catch (error) {
-      console.error('Lỗi kết nối MongoDB Atlas:', error);
-      throw error;
-    }
-  }
-  return db;
-}
 
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const database = await connectToDatabase();
-    const ordersCollection = database.collection('orders');
-
-    // Validate dữ liệu đầu vào
-    const { product, customer } = body;
+    await connectToDatabase();
     
+    const body = await request.json();
+    const { product, customer, orderStatus, totalAmount } = body;
+    
+    // Validate dữ liệu đầu vào
     if (!product || !customer || !customer.fullName || !customer.phoneNumber || !customer.address) {
       return NextResponse.json({
         success: false,
@@ -55,24 +19,49 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
+    // Tạo đơn hàng mới với Mongoose model
     const orderData = {
-      ...body,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      product: {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        category: product.category
+      },
+      customer: {
+        fullName: customer.fullName.trim(),
+        phoneNumber: customer.phoneNumber.trim(),
+        address: customer.address.trim(),
+        note: customer.note ? customer.note.trim() : ''
+      },
+      orderStatus: orderStatus || 'pending',
+      totalAmount: totalAmount || product.price
     };
 
-    const result = await ordersCollection.insertOne(orderData);
+    const order = await Order.create(orderData);
 
-    console.log('Đơn hàng mới được tạo:', result.insertedId);
+    console.log('Đơn hàng mới được tạo:', order._id);
 
     return NextResponse.json({
       success: true,
       message: 'Đơn hàng đã được tạo thành công',
-      orderId: result.insertedId
+      orderId: order._id,
+      data: order
     }, { status: 201 });
 
   } catch (error) {
     console.error('Lỗi khi tạo đơn hàng:', error);
+    
+    // Xử lý lỗi validation từ Mongoose
+    if (error.name === 'ValidationError') {
+      const errorMessages = Object.values(error.errors).map(err => err.message);
+      return NextResponse.json({
+        success: false,
+        message: 'Dữ liệu không hợp lệ',
+        errors: errorMessages
+      }, { status: 400 });
+    }
+    
     return NextResponse.json({
       success: false,
       message: 'Lỗi server khi tạo đơn hàng',
@@ -82,9 +71,27 @@ export async function POST(request) {
 }
 
 export async function GET() {
-  return NextResponse.json({
-    message: 'Orders API is working!',
-    methods: ['POST'],
-    endpoint: '/api/orders'
-  });
+  try {
+    await connectToDatabase();
+    
+    // Lấy danh sách đơn hàng (có thể thêm pagination sau)
+    const orders = await Order.find({})
+      .sort({ createdAt: -1 })
+      .limit(50); // Giới hạn 50 đơn hàng gần nhất
+    
+    return NextResponse.json({
+      success: true,
+      message: 'Lấy danh sách đơn hàng thành công',
+      data: orders,
+      total: orders.length
+    });
+    
+  } catch (error) {
+    console.error('Lỗi khi lấy danh sách đơn hàng:', error);
+    return NextResponse.json({
+      success: false,
+      message: 'Lỗi server khi lấy danh sách đơn hàng',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    }, { status: 500 });
+  }
 }
