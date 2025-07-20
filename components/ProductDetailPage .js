@@ -96,8 +96,8 @@ export default function ProductDetailPage({ product }) {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
-        <Link href="/products" className="text-blue-600 hover:underline">
-          &larr; Quay lại danh sách
+        <Link href="/" className="text-blue-600 hover:underline">
+          &larr; Quay về trang chủ
         </Link>
       </div>
       
@@ -140,15 +140,10 @@ export default function ProductDetailPage({ product }) {
               Mua ngay
             </button>
             
-            <Link
-              href={`/products/${product._id}/edit`}
-              className="bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 text-center"
-            >
-              Chỉnh sửa
-            </Link>
+            {/* Nút chỉnh sửa đã được ẩn */}
             
             <Link
-              href="/products"
+              href="/"
               className="bg-gray-200 text-gray-800 py-3 px-6 rounded-md hover:bg-gray-300 text-center"
             >
               Quay lại
@@ -266,7 +261,7 @@ export default function ProductDetailPage({ product }) {
                       onChange={handleInputChange}
                       rows={2}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Ghi chú thêm cho đơn hàng"
+                      placeholder="Kết nối hoặc cánh diều hoặc ghi tên trường để soạn bộ sách phù hợp"
                       disabled={isSubmitting}
                     />
                   </div>

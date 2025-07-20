@@ -5,19 +5,19 @@ export default function Navbar() {
     <nav className="bg-blue-600 p-4">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-white text-xl font-bold">
-          Quản Lý Sản Phẩm
+          Cửa hàng sách Kon Tum
         </Link>
         <div className="space-x-4">
           <Link href="/" className="text-white hover:text-blue-200">
             Trang chủ
           </Link>
-          <Link href="/products" className="text-white hover:text-blue-200">
-            Danh sách sản phẩm
+          <Link href="#" className="text-white hover:text-blue-200">
+            Sản phẩm
           </Link>
-          <Link href="/products/add" className="text-white hover:text-blue-200">
-            Thêm sản phẩm
+          <Link href="#" className="text-white hover:text-blue-200">
+            Thông báo
           </Link>
-          <Link href="/orders" className="text-white hover:text-blue-200">
+          <Link href="#" className="text-white hover:text-blue-200">
             Đơn hàng
           </Link>
         </div>
