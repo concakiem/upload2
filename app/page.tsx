@@ -22,7 +22,7 @@ export default async function Home() {
       <div className="relative bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20 px-6 rounded-xl overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="relative max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-6">Sách Giáo Khoa Chất Mới Nhất</h1>
+          <h1 className="text-5xl font-bold mb-6">Sách Giáo Khoa Mới Nhất</h1>
           <p className="text-xl mb-8 leading-relaxed">
             Khám phá bộ sưu tập sách giáo khoa đầy đủ từ lớp 1 đến lớp 12, 
             Cập nhật liên tục các đầu sách mới theo chương trình giáo dục phổ thông

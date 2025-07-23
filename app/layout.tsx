@@ -1,5 +1,6 @@
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import { ReactNode } from 'react';
 
 export const metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body>
         <Navbar />
         <main className="container mx-auto py-8 px-4">{children}</main>
+        <Footer />
       </body>
     </html>
   );
