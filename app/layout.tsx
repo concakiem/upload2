@@ -2,6 +2,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ReactNode } from 'react';
+import FloatPhoneButton from '@/components/FloatPhoneButton';
 
 export const metadata = {
   title: 'Quản Lý Sản Phẩm',
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <Navbar />
         <main className="container mx-auto py-8 px-4">{children}</main>
         <Footer />
+        <FloatPhoneButton />
       </body>
     </html>
   );
