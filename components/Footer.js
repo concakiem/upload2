@@ -122,8 +122,8 @@ export default function Footer() {
                 <MapPin className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-300">
-                    123 Nguyễn Huệ, Thành phố Kon Tum, 
-                    Tỉnh Kon Tum, Việt Nam
+                    653 Nguyễn Huệ, Thành phố Kon Tum, 
+                    653 Nguyễn Huệ, Phường Kon Tum,
                   </p>
                 </div>
               </div>
@@ -132,10 +132,10 @@ export default function Footer() {
                 <Phone className="w-5 h-5 text-gray-400 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-300">
-                    Hotline: <a href="tel:02603123456" className="hover:text-white">026 0312 3456</a>
+                    Hotline: <a href="tel:0336061457" className="hover:text-white">033 606 1457</a>
                   </p>
                   <p className="text-sm text-gray-300">
-                    Mobile: <a href="tel:0987654321" className="hover:text-white">098 765 4321</a>
+                    Mobile: <a href="tel:0336061457" className="hover:text-white">033 606 1457</a>
                   </p>
                 </div>
               </div>
@@ -143,8 +143,8 @@ export default function Footer() {
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-gray-400 flex-shrink-0" />
                 <p className="text-sm text-gray-300">
-                  <a href="mailto:info@sachkontum.vn" className="hover:text-white">
-                    info@sachkontum.vn
+                  <a href="mailto:info@nhasachkt.vn" className="hover:text-white">
+                    info@nhasachkt.vn
                   </a>
                 </p>
               </div>

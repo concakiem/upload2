@@ -36,7 +36,7 @@ export default function FloatPhoneButton() {
   };
 
   const handlePhoneCall = () => {
-    window.open('tel:+84987654321', '_self');
+    window.open('tel:+84336061457', '_self');
   };
 
   const handleCloseCard = () => {
@@ -81,7 +81,7 @@ export default function FloatPhoneButton() {
                   onClick={handlePhoneCall}
                   className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
                 >
-                  098 765 4321
+                  033 606 1457
                 </button>
                 <p className="text-sm text-gray-500 mt-1">
                   Nhấn để gọi ngay
